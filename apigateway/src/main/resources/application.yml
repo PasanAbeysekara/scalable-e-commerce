@@ -1,0 +1,53 @@
+server:
+  port: 8080 # Gateway will run on port 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Route for User Service
+        - id: user-service
+          uri: http://localhost:8081 # User Service URL
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - StripPrefix=2
+
+        # Route for Product Catalog Service
+        - id: product-service
+          uri: http://localhost:8082 # Product Service URL
+          predicates:
+            - Path=/api/v1/products/**
+
+        # Route for Shopping Cart Service
+        - id: cart-service
+          uri: http://localhost:8083 # Shopping Cart Service URL
+          predicates:
+            - Path=/api/v1/cart/**
+
+        # Route for Order Service
+        - id: order-service
+          uri: http://localhost:8084 # Order Service URL
+          predicates:
+            - Path=/api/v1/orders/**
+
+        # Route for Payment Service
+        - id: payment-service
+          uri: http://localhost:8085 # Payment Service URL
+          predicates:
+            - Path=/api/v1/payments/**
+
+      default-filters:
+        - AddResponseHeader=X-Gateway-Header, GatewayActive
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:public.pem # JWT public key for token validation
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, httptrace

@@ -1,0 +1,10 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+
+server:
+  port: 8083
+
+jwt:
+  public-key-path: src/main/resources/public.pem
